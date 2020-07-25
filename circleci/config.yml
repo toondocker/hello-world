@@ -1,0 +1,40 @@
+version: 2.1
+orbs:
+  # anchore:        anchore/anchore-engine@volatile
+  # shellcheck:     circleci/shellcheck@volatile
+  docker-publish: circleci/docker@volatile
+  
+workflows:
+  version: 2
+  build_test_deploy:
+    jobs:
+      # - shellcheck/check
+      - docker-publish/publish:
+          after_checkout:
+            - run:
+                name: Do this after checkout - set ENV variables.
+                command: |
+                  echo 'export TAG=0.1.$CIRCLE_BUILD_NUM DOCKER_PASSWORD=$DOCKER_PASS DOCKER_LOGIN=$DOCKER_USER' >> $BASH_ENV
+          after_build:
+            - run:
+                name: Do this after the build - add latest tag.
+                command: docker tag toondocker/helloworld:$TAG toondocker/helloworld:latest
+          image: toondocker/helloworld
+          tag: $TAG
+          # requires:
+          #   - shellcheck/check
+      # - anchore/image_scan:
+      #     image_name: toondocker/helloworld:latest
+      #     timeout: '300'
+      #     private_registry: True
+      #     registry_name: docker.io
+      #     registry_user: "${DOCKER_USER}"
+      #     registry_pass: "${DOCKER_PASS}"
+      #     policy_failure: true
+      #     requires: 
+      #       - docker-publish/publish
+      
+# Anchore Engine is a docker container static analysis and policy-based compliance tool that
+# automates the inspection, analysis, and evaluation of images to allow high confidence in
+# container deployments by ensuring workload content meets the required criteria.
+# Anchore uses Docker Layering which can no longer be used on a free plan
