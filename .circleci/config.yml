@@ -10,6 +10,7 @@ workflows:
     jobs:
       # - shellcheck/check
       - docker-publish/publish:
+          context: toonContext
           after_checkout:
             - run:
                 name: Do this after checkout - set ENV variables.
