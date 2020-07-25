@@ -2,8 +2,8 @@ version: 2.1
 orbs:
   # anchore:        anchore/anchore-engine@volatile
   # shellcheck:     circleci/shellcheck@volatile
-  docker-publish: circleci/docker@latest
-  snyk: snyk/snyk@latest  
+  docker-publish: circleci/docker@volatile
+  snyk: snyk/snyk@volatile  
 #
 workflows:
   version: 2
