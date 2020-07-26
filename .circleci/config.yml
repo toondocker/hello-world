@@ -23,10 +23,11 @@ workflows:
                 command: echo 'export IMAGE_NAME="toondocker/helloworld"' >> $BASH_ENV
           after_build:
             - snyk/scan:
-                docker-image-name: $IMAGE_NAME
+                docker-image-name: $IMAGE_NAME:$TAG
             - run:
                 name: Do this after the build - add latest tag.
-                command: docker tag toondocker/helloworld:$TAG toondocker/helloworld:latest
+                command: docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
+#                command: docker tag toondocker/helloworld:$TAG toondocker/helloworld:latest
           image: $IMAGE_NAME
           tag: $TAG
           # requires:
