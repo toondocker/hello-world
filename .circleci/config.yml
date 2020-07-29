@@ -9,7 +9,7 @@ workflows:
   version: 2
   build_test_deploy:
     jobs:
-      # - shellcheck/check
+      - shellcheck/check
       - docker-publish/publish:
           context: toonContext
           after_checkout:
@@ -30,8 +30,8 @@ workflows:
 #                command: docker tag toondocker/helloworld:$TAG toondocker/helloworld:latest
           image: $IMAGE_NAME
           tag: $TAG
-          # requires:
-          #   - shellcheck/check
+          requires:
+            - shellcheck/check
       # - anchore/image_scan:
       #     image_name: toondocker/helloworld:latest
       #     timeout: '300'
