@@ -21,8 +21,12 @@ workflows:
                   # before_build:
             - run: 
                 name: "Setup custom environment variables"
-                command: echo 'export IMAGE_NAME="toondocker/helloworld"' >> $BASH_ENV
+                command: echo 'export IMAGE_NAME="toondocker/hello-world"' >> $BASH_ENV
           after_build:
+            - run:
+              name: check variables after build
+              command: echo $IMGNAME
+              command: echo $IMAGE_NAME:TAG
             - snyk/scan:
           #    docker-image-name: $IMGNAME
                docker-image-name: $IMAGE_NAME:$TAG
