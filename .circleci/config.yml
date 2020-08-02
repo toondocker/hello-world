@@ -1,9 +1,8 @@
 version: 2.1
 orbs:
-  # anchore:        anchore/anchore-engine@volatile
   shellcheck:     circleci/shellcheck@volatile
   docker-publish: circleci/docker@volatile
-  snyk: snyk/snyk@volatile  
+  snyk:           snyk/snyk@volatile  
 #
 workflows:
   version: 2
@@ -17,40 +16,10 @@ workflows:
                 name: Do this after checkout - set ENV variables.
                 command: |
                   echo 'export TAG=0.1.$CIRCLE_BUILD_NUM DOCKER_PASSWORD=$DOCKER_PASS DOCKER_LOGIN=$DOCKER_USER' >> $BASH_ENV
-                  echo 'export IMGNAME=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$TAG' >> $BASH_ENV
-          # before_build:
-          #   - run: 
-          #       name: "Setup custom environment variables"
-          #       command: echo 'export IMAGE_NAME="toondocker/hello-world"' >> $BASH_ENV
           after_build:
-            # - run:
-            #     name: check variables after build
-            #     command: |
-            #       echo $IMGNAME
-            #       echo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$TAG
             - snyk/scan:
                docker-image-name: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$TAG
-           #    docker-image-name: $IMGNAME
-            # - run:
-            #     name: Do this after the build - add latest tag.
-            #     command: docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
-#          image: $IMAGE_NAME
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME    
           tag: '$TAG,latest'
           requires:
             - shellcheck/check
-      # - anchore/image_scan:
-      #     image_name: toondocker/helloworld:latest
-      #     timeout: '300'
-      #     private_registry: True
-      #     registry_name: docker.io
-      #     registry_user: "${DOCKER_USER}"
-      #     registry_pass: "${DOCKER_PASS}"
-      #     policy_failure: true
-      #     requires: 
-      #       - docker-publish/publish
-      
-# Anchore Engine is a docker container static analysis and policy-based compliance tool that
-# automates the inspection, analysis, and evaluation of images to allow high confidence in
-# container deployments by ensuring workload content meets the required criteria.
-# Anchore uses Docker Layering which can no longer be used on a free plan
