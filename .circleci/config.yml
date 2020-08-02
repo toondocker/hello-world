@@ -17,16 +17,17 @@ workflows:
                 name: Do this after checkout - set ENV variables.
                 command: |
                   echo 'export TAG=0.1.$CIRCLE_BUILD_NUM DOCKER_PASSWORD=$DOCKER_PASS DOCKER_LOGIN=$DOCKER_USER' >> $BASH_ENV
-#                  echo 'export IMGNAME=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$TAG' >> $BASH_ENV
-                  # before_build:
+                  echo 'export IMGNAME=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$TAG' >> $BASH_ENV
+          before_build:
             - run: 
                 name: "Setup custom environment variables"
                 command: echo 'export IMAGE_NAME="toondocker/hello-world"' >> $BASH_ENV
           after_build:
             - run:
-              name: check variables after build
-              command: echo $IMGNAME
-              command: echo $IMAGE_NAME:TAG
+                name: check variables after build
+                command: |
+                  echo $IMGNAME
+                  echo $IMAGE_NAME:TAG
             - snyk/scan:
           #    docker-image-name: $IMGNAME
                docker-image-name: $IMAGE_NAME:$TAG
