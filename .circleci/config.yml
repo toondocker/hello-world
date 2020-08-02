@@ -27,10 +27,10 @@ workflows:
                 name: check variables after build
                 command: |
                   echo $IMGNAME
-                  echo $IMAGE_NAME:TAG
+                  echo $IMAGE_NAME:$TAG
             - snyk/scan:
-          #    docker-image-name: $IMGNAME
-               docker-image-name: $IMAGE_NAME:$TAG
+               docker-image-name: $IMGNAME
+           #    docker-image-name: $IMAGE_NAME:$TAG
             # - run:
             #     name: Do this after the build - add latest tag.
             #     command: docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
