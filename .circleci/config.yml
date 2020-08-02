@@ -23,14 +23,14 @@ workflows:
           #       name: "Setup custom environment variables"
           #       command: echo 'export IMAGE_NAME="toondocker/hello-world"' >> $BASH_ENV
           after_build:
-            - run:
-                name: check variables after build
-                command: |
-                  echo $IMGNAME
-                  echo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$TAG
+            # - run:
+            #     name: check variables after build
+            #     command: |
+            #       echo $IMGNAME
+            #       echo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$TAG
             - snyk/scan:
-               docker-image-name: $IMGNAME
-           #    docker-image-name: $IMAGE_NAME:$TAG
+               docker-image-name: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$TAG
+           #    docker-image-name: $IMGNAME
             # - run:
             #     name: Do this after the build - add latest tag.
             #     command: docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
